@@ -1,73 +1,49 @@
---// Full-Screen Fake Loading Screen with Anti-UI Bypass
 local Players = game:GetService("Players")
 local StarterGui = game:GetService("StarterGui")
+local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-local Humanoid = Character:WaitForChild("Humanoid")
 
 -- Freeze movement
-Humanoid.WalkSpeed = 0
-Humanoid.JumpPower = 0
-
--- Disable chat scripts (client-side)
-pcall(function()
-	for _, s in pairs(LocalPlayer.PlayerScripts:GetChildren()) do
-		if s:IsA("LocalScript") and s.Name:lower():find("chat") then
-			s.Disabled = true
-		end
-	end
-end)
-
--- Hide CoreGui elements (backpack, health, etc.)
-pcall(function()
-	for _, type in pairs(Enum.CoreGuiType:GetEnumItems()) do
-		StarterGui:SetCoreGuiEnabled(type, false)
-	end
-end)
-
--- UI Setup
-local screenGui = Instance.new("ScreenGui", LocalPlayer:WaitForChild("PlayerGui"))
-screenGui.IgnoreGuiInset = true
-screenGui.ResetOnSpawn = false
-screenGui.Name = "FakeLoadingUI"
-
-local frame = Instance.new("Frame", screenGui)
-frame.Size = UDim2.new(1, 0, 1, 0)
-frame.Position = UDim2.new(0, 0, 0, 0)
-frame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
-frame.ZIndex = 10
-
--- Loading Text
-local loadingText = Instance.new("TextLabel", frame)
-loadingText.Size = UDim2.new(1, 0, 1, 0)
-loadingText.Text = "Loading.. 0%"
-loadingText.TextColor3 = Color3.new(1, 1, 1)
-loadingText.BackgroundTransparency = 1
-loadingText.Font = Enum.Font.SourceSansLight
-loadingText.TextSize = 42
-loadingText.TextStrokeTransparency = 0.7
-loadingText.Position = UDim2.new(0, 0, 0.4, 0)
-
--- Bypass Text
-local bypassText = Instance.new("TextLabel", frame)
-bypassText.Size = UDim2.new(1, 0, 1, 0)
-bypassText.Text = "Bypassing Anticheat... please wait"
-bypassText.TextColor3 = Color3.fromRGB(200, 200, 200)
-bypassText.BackgroundTransparency = 1
-bypassText.Font = Enum.Font.SourceSans
-bypassText.TextSize = 26
-bypassText.TextStrokeTransparency = 0.8
-bypassText.Position = UDim2.new(0, 0, 0.48, 0)
-
--- Fake Progress
-local totalDuration = 180 -- 3 minutes
-local steps = 100
-local waitTime = totalDuration / steps
-
-for i = 1, steps do
-	task.wait(waitTime)
-	loadingText.Text = "Loading.. " .. tostring(i) .. "%"
+local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+if Humanoid then
+	Humanoid.WalkSpeed = 0
+	Humanoid.JumpPower = 0
 end
 
--- Freeze at 100%
-loadingText.Text = "Loading.. 100%"
+-- Disable chat UI and CoreGui
+pcall(function()
+	for _, v in ipairs(Enum.CoreGuiType:GetEnumItems()) do
+		StarterGui:SetCoreGuiEnabled(v, false)
+	end
+end)
+
+-- Destroy all visible ScreenGuis (optional, aggressive)
+for _, gui in ipairs(LocalPlayer:WaitForChild("PlayerGui"):GetChildren()) do
+	if gui:IsA("ScreenGui") and gui.Name ~= "FakeLoadingUI" then
+		gui:Destroy()
+	end
+end
+
+-- Create full-screen loading UI
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "FakeLoadingUI"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.IgnoreGuiInset = true
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+local Background = Instance.new("Frame", ScreenGui)
+Background.Size = UDim2.new(1, 0, 1, 0)
+Background.Position = UDim2.new(0, 0, 0, 0)
+Background.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+Background.ZIndex = 10
+
+-- Loading Text
+local LoadingText = Instance.new("TextLabel", Background)
+LoadingText.Size = UDim2.new(1, 0, 0, 60)
+LoadingText.Position = UDim2.new(0, 0, 0.4, 0)
+LoadingText.TextColor3 = Color3.new(1, 1, 1)
+LoadingText.TextStrokeTransparency = 0.7
+LoadingText.BackgroundTransparency = 1
+LoadingText.Font = E
