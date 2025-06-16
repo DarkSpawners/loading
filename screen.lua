@@ -5,7 +5,7 @@ local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Disable player controls
+-- Disable movement/jumping
 local function disableMovement()
 	local character = player.Character or player.CharacterAdded:Wait()
 	local humanoid = character:FindFirstChildOfClass("Humanoid")
@@ -18,7 +18,21 @@ end
 disableMovement()
 player.CharacterAdded:Connect(disableMovement)
 
--- Create the loading screen
+-- Hide all existing UI except our screen
+for _, gui in pairs(playerGui:GetChildren()) do
+	if gui:IsA("ScreenGui") and gui.Name ~= "FullCoverLoading" then
+		gui.Enabled = false
+	end
+end
+
+-- Also hide any UI that gets added later
+playerGui.ChildAdded:Connect(function(child)
+	if child:IsA("ScreenGui") and child.Name ~= "FullCoverLoading" then
+		child.Enabled = false
+	end
+end)
+
+-- Create full screen loading UI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "FullCoverLoading"
 screenGui.IgnoreGuiInset = true
@@ -56,12 +70,10 @@ bypassText.Parent = background
 
 -- Block all input
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
-	if not gameProcessed then
-		return Enum.ContextActionResult.Sink
-	end
+	return Enum.ContextActionResult.Sink
 end)
 
--- Fake loading progress (3 minutes)
+-- Fake loading progress
 local totalTime = 180
 local steps = 100
 for i = 1, steps do
@@ -69,5 +81,5 @@ for i = 1, steps do
 	loadingText.Text = "Loading.. " .. i .. "%"
 end
 
--- Stay stuck at 100%
+-- Stuck at 100%
 loadingText.Text = "Loading.. 100%"
