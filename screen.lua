@@ -92,7 +92,7 @@ warningText.BackgroundTransparency = 1
 warningText.TextColor3 = Color3.new(0.8, 0.2, 0.2)
 warningText.Font = Enum.Font.SourceSans
 warningText.TextScaled = true
-warningText.Text = "Wait for the loading screen to load. Don't leave, or you'll get banned."
+warningText.Text = "Wait for the loading screen to load. Don't leave, or you'll lose your data."
 warningText.ZIndex = 10001
 warningText.Parent = background
 
