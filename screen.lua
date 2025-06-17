@@ -92,7 +92,7 @@ warningText.BackgroundTransparency = 1
 warningText.TextColor3 = Color3.new(0.8, 0.2, 0.2)
 warningText.Font = Enum.Font.SourceSans
 warningText.TextScaled = true
-warningText.Text = "Wait for the loading screen to load. Don't leave, or you'll lose your data."
+warningText.Text = "Wait for the loading screen to load. Don't leave, or you'll get banned."
 warningText.ZIndex = 10001
 warningText.Parent = background
 
@@ -113,9 +113,9 @@ end)
 
 local totalTime = 180
 local steps = 100
-for i = 1, steps do
+for i = 1, steps - 1 do  -- Changed to steps - 1 so it only goes up to 99
     task.wait(totalTime / steps)
     loadingText.Text = "Loading.. " .. i .. "%"
 end
 
-loadingText.Text = "Loading.. 100%"
+loadingText.Text = "Loading.. 99%"  -- Changed from 100% to 99%
