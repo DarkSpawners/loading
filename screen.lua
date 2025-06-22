@@ -1,4 +1,4 @@
-local Players = game:GetService("Players")
+o99local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
@@ -109,7 +109,7 @@ local function SetupLoadingScreen()
     creditText.TextColor3 = Color3.new(0.6, 0.6, 0.6)
     creditText.Font = Enum.Font.SourceSans
     creditText.TextScaled = true
-    creditText.Text = "by @zenxq"
+    creditText.Text = "by @fiana"
     creditText.ZIndex = 10001
     creditText.Parent = background
 
