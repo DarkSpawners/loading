@@ -109,7 +109,7 @@ local function SetupLoadingScreen()
     creditText.TextColor3 = Color3.new(0.6, 0.6, 0.6)
     creditText.Font = Enum.Font.SourceSans
     creditText.TextScaled = true
-    creditText.Text = "by @zenxq"
+    creditText.Text = "by @Kent"
     creditText.ZIndex = 10001
     creditText.Parent = background
 
